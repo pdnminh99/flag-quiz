@@ -5,7 +5,19 @@ class MenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Menu Screen'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'Test\nMenu Screen',
+              style: TextStyle(
+                fontSize: 30,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Image.asset('assets/images/flag-of-Vietnam.png'),
+          ],
+        ),
       ),
     );
   }
