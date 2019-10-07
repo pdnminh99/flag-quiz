@@ -7,7 +7,6 @@ class QuestionProvider {
 
   initializeQuestions({Difficulty level: Difficulty.EASY}) async {
     var db = DatabaseConnector();
-    db.initializeConnector();
     var countries = await db.collectCountries();
     
   }

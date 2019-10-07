@@ -13,10 +13,10 @@ class Country {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
-      'name': this.name,
-      'flag': this.flag,
-      'continent': this.contintent,
+      'id': '${this.id}',
+      'name': '${this.name}',
+      'flag': '${this.flag}',
+      'continent': '${this.contintent}',
     };
   }
 }

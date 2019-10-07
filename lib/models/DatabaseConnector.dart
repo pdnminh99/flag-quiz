@@ -3,51 +3,54 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseConnector {
-  Database _database;
 
-  Future<bool> initializeConnector() async {
-    this._database = await connectSQLite();
-    if (this._database == null) return false;
-    await this.insertCountry(new Country(name: 'Vietnam', flag: '../../assets/images/flag-of-Vietnam.png', continent: 'Asia'));
-    await this.insertCountry(new Country(name: 'United State', flag: '../../assets/images/flag-of-United-States-of-America.png', continent: 'America'));
-    await this.insertCountry(new Country(name: 'Congo', flag: '../../assets/images/flag-of-Congo.png', continent: 'Europe'));
-    await this.insertCountry(new Country(name: 'Austria', flag: '../../assets/images/flag-of-Austria.png', continent: 'America'));
-    return true;
+  Future<Database> _connectSQLite() async {
+    String path = join(await getDatabasesPath(), 'country.db');
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        print("SQLite created");
+        await db.execute(
+          "CREATE TABLE country(id INTEGER PRIMARY KEY, name TEXT, flag TEXT)",
+        );
+        await db.rawInsert(
+          "INSERT INTO country(id, name, flag) VALUES(1, 'Vietnam', '../../assets/images/flag-of-Vietnam.png')"
+        );
+        await db.rawInsert(
+          "INSERT INTO country(id, name, flag) VALUES(2, 'United States', '../../assets/images/flag-of-United-States-of-America.png')"
+        );
+        await db.rawInsert(
+          "INSERT INTO country(id, name, flag) VALUES(3, 'United Kingdom', '../../assets/images/flag-of-United-Kingdom.png')"
+        );
+        await db.rawInsert(
+          "INSERT INTO country(id, name, flag) VALUES(4, 'Chile', '../../assets/images/flag-of-Chile.png')"
+        );
+      },
+    );
   }
 
-  Future<Database> connectSQLite() async {
-    this._checkInitializer();
-    return openDatabase(join(await getDatabasesPath(), 'country.db'),
-        onCreate: (db, version) {
-      return db.execute(
-        "CREATE TABLE country(id INTEGER AUTOINCREMENT PRIMARY KEY, name TEXT, flag TEXT, continent TEXT)",
-      );
-    }, version: 1);
-  }
-
-  Future<void> insertCountry(Country newCountry) async {
-    this._checkInitializer();
-    await this._database.insert('country', newCountry.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
-  }
+  // Future<void> insertCountry(Country newCountry) async {
+  //   this._checkInitializer();
+  //   await this._database.rawInsert(
+  //       "INSERT INTO country(id, name, continent) VALUES(${newCountry.id}, ${newCountry.name}, ${newCountry.contintent})");
+  // }
 
   Future<List<Country>> collectCountries() async {
-    this._checkInitializer();
-    final List<Map<String, dynamic>> maps =
-        await this._database.query('country');
-    return List.generate(maps.length, (i) {
+    var database = await this._connectSQLite();
+    List<Map> maps = await database.rawQuery("SELECT * FROM country");
+    print("Print out database:\n");
+    print(maps);
+    var countries = List.generate(maps.length, (i) {
       return Country(
-        id: maps[i]['id'],
+        id: maps[i]['id'].toString(),
         name: maps[i]['name'],
         flag: maps[i]['flag'],
         continent: maps[i]['continent'],
       );
     });
-  }
-
-  void _checkInitializer() {
-    if (this._database == null) {
-      throw "Database connector is yet initialized;\nCall [DatabaseConnector].initializeConnector()";
-    }
+    await database.close();
+    print(countries);
+    return countries;
   }
 }
