@@ -1,10 +1,16 @@
+import 'package:flag_quiz/models/DatabaseConnector.dart';
 import 'package:flag_quiz/models/Enum.dart';
 import 'package:flag_quiz/models/Question.dart';
 
 class QuestionProvider {
   var _collections = List<Question>();
 
-  QuestionProvider({Difficulty level: Difficulty.EASY});
+  initializeQuestions({Difficulty level: Difficulty.EASY}) async {
+    var db = DatabaseConnector();
+    db.initializeConnector();
+    var countries = await db.collectCountries();
+    
+  }
 
   List<Question> getCollections() => this._collections;
 }
