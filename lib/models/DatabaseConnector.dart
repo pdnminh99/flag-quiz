@@ -15,16 +15,16 @@ class DatabaseConnector {
           "CREATE TABLE country(id INTEGER PRIMARY KEY, name TEXT, flag TEXT)",
         );
         await db.rawInsert(
-          "INSERT INTO country(id, name, flag) VALUES(1, 'Vietnam', '../../assets/images/flag-of-Vietnam.png')"
+          "INSERT INTO country(id, name, flag) VALUES(1, 'Vietnam', 'assets/images/flag-of-Vietnam.png')"
         );
         await db.rawInsert(
-          "INSERT INTO country(id, name, flag) VALUES(2, 'United States', '../../assets/images/flag-of-United-States-of-America.png')"
+          "INSERT INTO country(id, name, flag) VALUES(2, 'United States', 'assets/images/flag-of-United-States-of-America.png')"
         );
         await db.rawInsert(
-          "INSERT INTO country(id, name, flag) VALUES(3, 'United Kingdom', '../../assets/images/flag-of-United-Kingdom.png')"
+          "INSERT INTO country(id, name, flag) VALUES(3, 'United Kingdom', 'assets/images/flag-of-United-Kingdom.png')"
         );
         await db.rawInsert(
-          "INSERT INTO country(id, name, flag) VALUES(4, 'Chile', '../../assets/images/flag-of-Chile.png')"
+          "INSERT INTO country(id, name, flag) VALUES(4, 'Chile', 'assets/images/flag-of-Chile.png')"
         );
       },
     );

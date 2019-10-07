@@ -14,6 +14,9 @@ class DemoScreen extends State<MyApp> {
        this.countries = countries;
       });
       print("There are ${countries.length} countries retrieved");
+      for (var country in this.countries) {
+        print("${country.name}\n");
+      }
     });
   }
 
@@ -31,12 +34,20 @@ class DemoScreen extends State<MyApp> {
       ),
     body: Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Text("Test SQLite queries"),
-          for (var country in this.countries) Image.asset(country.flag)
-        ],
+        mainAxisSize: MainAxisSize.min,
+        children: parseImage(this.countries),
       ),
     ),
   );
+
+  List<Widget> parseImage(List<Country> countries) {
+    var imageParser = List<Widget>();
+    for (var country in countries) {
+      print('${country.name} has flag dir ${country.flag}');
+      imageParser.add(Image.asset('${country.flag}'));
+    }
+    print("total widgets are ${imageParser.length}");
+    return imageParser;
+  }
+
 }
