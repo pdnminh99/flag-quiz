@@ -820,15 +820,14 @@ class DatabaseConnector {
     );
   }
 
-  // Future<void> insertCountry(Country newCountry) async {
-  //   this._checkInitializer();
-  //   await this._database.rawInsert(
-  //       "INSERT INTO country(id, name, continent) VALUES(${newCountry.id}, ${newCountry.name}, ${newCountry.contintent})");
-  // }
-
-  Future<List<Country>> collectCountries() async {
+  Future<List<Country>> collectCountries({count: 0}) async {
     var database = await this._connectSQLite();
-    List<Map> maps = await database.rawQuery("SELECT * FROM country");
+    var maps = List<Map>();
+    if (count == 0) {
+      maps = await database.rawQuery("SELECT * FROM country");
+    } else {
+      maps = await database.rawQuery("SELECT * FROM country ORDER BY RANDOM() LIMIT $count");
+    }
     var countries = List.generate(maps.length, (i) {
       return Country(
         id: maps[i]['id'].toString(),
